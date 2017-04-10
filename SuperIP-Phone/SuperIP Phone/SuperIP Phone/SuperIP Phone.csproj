@@ -35,6 +35,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluorineFx">
+      <HintPath>..\..\..\FluorineFx.dll</HintPath>
+    </Reference>
+    <Reference Include="OzekiComputerVision">
+      <HintPath>..\..\..\OzekiComputerVision.dll</HintPath>
+    </Reference>
+    <Reference Include="OzekiMediaGateway">
+      <HintPath>..\..\..\OzekiMediaGateway.dll</HintPath>
+    </Reference>
+    <Reference Include="OzekiSDK">
+      <HintPath>..\..\..\OzekiSDK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -55,6 +67,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Rejestracja.xaml.cs">
+      <DependentUpon>Rejestracja.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StronaGlowna.xaml.cs">
+      <DependentUpon>StronaGlowna.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Logowanie.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,10 +85,22 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="baza_danych.cs" />
+    <Compile Include="Logowanie.xaml.cs">
+      <DependentUpon>Logowanie.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Rejestracja.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StronaGlowna.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

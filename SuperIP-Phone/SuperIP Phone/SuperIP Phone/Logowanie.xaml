@@ -1,0 +1,22 @@
+﻿<Page x:Class="SuperIP_Phone.Logowanie"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SuperIP_Phone"
+        mc:Ignorable="d"
+        Title="Logowanie" Height="600" Width="800">
+    <Grid>
+        <Label x:Name="label" Content="Login:" HorizontalAlignment="Left" Margin="251,214,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <TextBox x:Name="login_textBox" HorizontalAlignment="Left" Height="43" Margin="335,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="215" FontSize="22"/>
+
+        <Label x:Name="label2" Content="Hasło:" HorizontalAlignment="Left" Margin="251,294,0,0" VerticalAlignment="Top" FontSize="20" RenderTransformOrigin="0.531,0.716"/>
+        <PasswordBox x:Name="passwordBox" HorizontalAlignment="Left" Margin="335,288,0,0" VerticalAlignment="Top" Width="215" Height="43" FontSize="22"/>
+
+        <Button x:Name="zaloguj_button" Content="Zaloguj" HorizontalAlignment="Center" Margin="0,381,0,0" VerticalAlignment="Top" Width="230" Click="zaloguj_button_Click" Background="#FFFB6A33" Height="51" FontSize="25" FontWeight="SemiBold"/>
+        <Label x:Name="zaloz_konto_label" Content="Nie masz konta? Zarejestruj się." HorizontalAlignment="Center" Margin="0,450,0,0" VerticalAlignment="Top" PreviewMouseDown="zaloz_konto_label_PreviewMouseDown" Height="32" Width="270" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
+        <Label x:Name="label3" Content="SIP Phone" HorizontalAlignment="Center" Height="109" Margin="194,10,188,0" VerticalAlignment="Top" Width="418" FontSize="80" Foreground="White" FontWeight="SemiBold" FontFamily="Microsoft YaHei"/>
+
+
+    </Grid>
+</Page>

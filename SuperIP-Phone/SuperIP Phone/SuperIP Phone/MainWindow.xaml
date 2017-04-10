@@ -5,8 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SuperIP_Phone"
         mc:Ignorable="d"
-        Title="SuperIP Phone" Height="350" Width="525" ShowInTaskbar="False">
-    <Grid>
-        
-    </Grid>
+        Title="SuperIP Phone" Height="600" Width="800" ShowInTaskbar="False" Background="#FF3A86FF">
+    <Frame Source="Logowanie.xaml" NavigationUIVisibility="Hidden"/>
 </Window>
