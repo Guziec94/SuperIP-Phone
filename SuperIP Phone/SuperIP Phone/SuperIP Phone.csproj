@@ -36,16 +36,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluorineFx">
-      <HintPath>..\..\..\FluorineFx.dll</HintPath>
+      <HintPath>.\FluorineFx.dll</HintPath>
     </Reference>
     <Reference Include="OzekiComputerVision">
-      <HintPath>..\..\..\OzekiComputerVision.dll</HintPath>
+      <HintPath>.\OzekiComputerVision.dll</HintPath>
     </Reference>
     <Reference Include="OzekiMediaGateway">
-      <HintPath>..\..\..\OzekiMediaGateway.dll</HintPath>
+      <HintPath>.\OzekiMediaGateway.dll</HintPath>
     </Reference>
     <Reference Include="OzekiSDK">
-      <HintPath>..\..\..\OzekiSDK.dll</HintPath>
+      <HintPath>.\OzekiSDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

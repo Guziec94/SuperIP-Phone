@@ -25,7 +25,7 @@ namespace SuperIP_Phone
         public Logowanie()
         {
             InitializeComponent();
-           // baza_danych.polacz_z_baza();
+            baza_danych.polacz_z_baza();
         }
 
         private void zaloz_konto_label_PreviewMouseDown(object sender, MouseButtonEventArgs e)

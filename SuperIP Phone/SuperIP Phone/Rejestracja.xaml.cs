@@ -59,5 +59,12 @@ namespace SuperIP_Phone
                 MessageBox.Show("Uzupełnij wymagane pola.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void wstecz_button_Click(object sender, RoutedEventArgs e)
+        {
+            var okno_logowania = new Logowanie();
+            NavigationService nav = NavigationService.GetNavigationService(this);
+            nav.Navigate(okno_logowania);
+        }
     }
 }
