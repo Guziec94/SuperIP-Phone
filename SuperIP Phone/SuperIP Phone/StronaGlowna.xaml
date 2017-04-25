@@ -5,20 +5,25 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:SuperIP_Phone"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="600" d:DesignWidth="800"
       Title="StronaGlowna">
 
     <Grid>
         <Grid>
-            <Button x:Name="Nasluchujbutton" Content="Nasluchuj" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="120" Click="Nasluchujbutton_Click"/>
-            <ComboBox x:Name="AdresIPcomboBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="AdresIPcomboBox_SelectionChanged"/>
-            <ComboBox x:Name="AudioINcomboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="10,37,0,0" SelectionChanged="AudioINcomboBox_SelectionChanged"/>
-            <ComboBox x:Name="AudioOUTcomboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="10,64,0,0" SelectionChanged="AudioOUTcomboBox_SelectionChanged"/>
-            <TextBox x:Name="DoZadzwonieniatextBox" HorizontalAlignment="Left" Height="23" Margin="10,115,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-            <Button x:Name="Zadzwonbutton" Content="Zadzwoń" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="120" Click="Zadzwonbutton_Click"/>
+            <Button x:Name="Nasluchujbutton" Content="Nasluchuj" HorizontalAlignment="Left" Margin="180,396,0,0" VerticalAlignment="Top" Width="200" Click="Nasluchujbutton_Click" Height="52" FontSize="25" Background="#FFFB6A33"/>
+            <ComboBox x:Name="AdresIPcomboBox" HorizontalAlignment="Left" Margin="10,152,0,0" VerticalAlignment="Top" Width="160" SelectionChanged="AdresIPcomboBox_SelectionChanged" Height="40"/>
+            <ComboBox x:Name="AudioINcomboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="160" Margin="10,229,0,0" SelectionChanged="AudioINcomboBox_SelectionChanged" Height="40"/>
+            <ComboBox x:Name="AudioOUTcomboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="160" Margin="10,308,0,0" SelectionChanged="AudioOUTcomboBox_SelectionChanged" Height="40"/>
+            <TextBox x:Name="DoZadzwonieniatextBox" HorizontalAlignment="Left" Height="23" Margin="10,370,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <Button x:Name="Zadzwonbutton" Content="Zadzwoń" HorizontalAlignment="Left" Margin="180,516,0,0" VerticalAlignment="Top" Width="200" Click="Zadzwonbutton_Click" Height="52" FontSize="25" Background="#FF009E0E" Foreground="White" BorderThickness="5"/>
             <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="135,10,0,0" VerticalAlignment="Top"/>
-            <Button x:Name="ZakonczNasluchbutton" Content="Zakończ nasłuch" HorizontalAlignment="Left" Margin="135,91,0,0" VerticalAlignment="Top" Width="120" Click="ZakonczNasluchbutton_Click"/>
-            <Button x:Name="ZakonczRozmowebutton" Content="Zakończ rozmowę" HorizontalAlignment="Left" Margin="135,143,0,0" VerticalAlignment="Top" Width="120"/>
+            <Button x:Name="ZakonczNasluchbutton" Content="Zakończ nasłuch" HorizontalAlignment="Left" Margin="420,396,0,0" VerticalAlignment="Top" Width="200" Click="ZakonczNasluchbutton_Click" Height="52" FontSize="25" Background="#FFFB6A33"/>
+            <Button x:Name="ZakonczRozmowebutton" Content="Zakończ rozmowę" HorizontalAlignment="Left" Margin="420,516,0,0" VerticalAlignment="Top" Width="200" Height="52" FontSize="25" Foreground="White" Background="#FF8F0000" BorderThickness="5"/>
+            <Label x:Name="label1" Content="Opcje" HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top" Width="120" Foreground="White" FontSize="20"/>
+            <Label x:Name="label3_Copy" Content="Zadzwoń" HorizontalAlignment="Center" Height="89" Margin="0,10,0,0" VerticalAlignment="Top" Width="324" FontSize="70" Foreground="White" FontWeight="SemiBold" FontFamily="Microsoft YaHei"/>
+            <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="416" Margin="645,152,0,0" VerticalAlignment="Top" Width="145"/>
+            <Label x:Name="label1_Copy" Content="Kontakty" HorizontalAlignment="Left" Margin="645,97,0,0" VerticalAlignment="Top" Width="120" Foreground="White" FontSize="20"/>
+            <Button x:Name="wstecz_button" Content="←" HorizontalAlignment="Left" Margin="25,25,0,0" VerticalAlignment="Top" Width="65" Height="65" FontSize="65" VerticalContentAlignment="Center" Padding="0,-19,0,0" Background="#FFFB6A33" Click="wstecz_button_Click"/>
         </Grid>
     </Grid>
 </Page>
