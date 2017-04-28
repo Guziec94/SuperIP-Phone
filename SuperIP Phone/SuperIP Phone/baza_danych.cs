@@ -149,5 +149,22 @@ namespace SuperIP_Phone
             }
             return false;
         }
+
+        public static void wprowadz_adres_IP()
+        {
+            string zapytanie = "Update uzytkownicy set AdresIP = @AdresIP where login = @login";
+            SqlCommand executeQuery = new SqlCommand(zapytanie, cnn);
+            executeQuery.Parameters.AddWithValue("login", Application.Current.Properties["Login"]);
+            executeQuery.Parameters.AddWithValue("AdresIP", Application.Current.Properties["AdresIP"]);
+            executeQuery.ExecuteNonQuery();
+        }
+
+        public static void usun_adres_IP()
+        {
+            string zapytanie = "Update uzytkownicy set AdresIP = NULL where login = @login";
+            SqlCommand executeQuery = new SqlCommand(zapytanie, cnn);
+            executeQuery.Parameters.AddWithValue("login", Application.Current.Properties["Login"]);
+            executeQuery.ExecuteNonQuery();
+        }
     }
 }

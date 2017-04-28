@@ -1,21 +1,11 @@
 ﻿using Ozeki.Media;
 using Ozeki.VoIP;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SuperIP_Phone
 {
@@ -38,89 +28,21 @@ namespace SuperIP_Phone
         public StronaGlowna()
         {
             InitializeComponent();
-            WyborAdresuIP();
-            WyborMikrofonu();
-            WyborGlosnikow();
             ZablokowacUI(true);
-            baza_danych.polacz_z_baza();
+            wybranyAdresIP = IPAddress.Parse(App.Current.Properties["AdresIP"].ToString());
+            Application.Current.MainWindow.Title = "SuperIP Phone - " + App.Current.Properties["Login"].ToString();
         }
 
         private void ZablokowacUI(bool CzyZablokowac)
         {
-            AudioINcomboBox.IsEnabled = CzyZablokowac;
-            AudioOUTcomboBox.IsEnabled = CzyZablokowac;
-            AdresIPcomboBox.IsEnabled = CzyZablokowac;
             Nasluchujbutton.IsEnabled = CzyZablokowac;
             Zadzwonbutton.IsEnabled = !CzyZablokowac;
             DoZadzwonieniatextBox.IsEnabled = !CzyZablokowac;
         }
 
-        private void WyborAdresuIP()
-        {
-            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
-                {
-                    if (ip.IsDnsEligible)
-                    {
-                        AdresIPcomboBox.Items.Add(ip.Address.ToString());
-                    }
-                }
-            }
-            AdresIPcomboBox.SelectedIndex = 0;
-        }
-
-        private void WyborGlosnikow()
-        {
-            int i = 0;
-            speaker = Speaker.GetDefaultDevice();
-            foreach (var device in Speaker.GetDevices())
-            {
-                AudioOUTcomboBox.Items.Add(device);
-                if (speaker.DeviceInfo.ToString() == device.ProductName)
-                {
-                    AudioOUTcomboBox.SelectedIndex = i;
-                }
-                i++;
-            }
-        }
-
-        private void WyborMikrofonu()
-        {
-            int i = 0;
-            microphone = Microphone.GetDefaultDevice();
-            foreach (var device in Microphone.GetDevices())
-            {
-                AudioINcomboBox.Items.Add(device);
-                if (microphone.DeviceInfo.ToString() == device.ProductName)
-                {
-                    AudioINcomboBox.SelectedIndex = i;
-                }
-                i++;
-            }
-        }
-
-        private void AdresIPcomboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string wybraneIP = AdresIPcomboBox.SelectedItem as string;
-            wybranyAdresIP = IPAddress.Parse(wybraneIP);
-        }
-
-        private void AudioINcomboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            AudioDeviceInfo wybrane = AudioINcomboBox.SelectedItem as AudioDeviceInfo;
-            microphone = Microphone.GetDevice(wybrane);
-        }
-
-        private void AudioOUTcomboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            AudioDeviceInfo wybrane = AudioOUTcomboBox.SelectedItem as AudioDeviceInfo;
-            speaker = Speaker.GetDevice(wybrane);
-        }
-
         private void Nasluchujbutton_Click(object sender, RoutedEventArgs e)
         {
-            label.Content = "Rozpoczęto nasłuchiwanie na adresie: " + wybranyAdresIP;
+            Statuslabel.Content = "Rozpoczęto nasłuchiwanie na adresie: " + wybranyAdresIP;
             softphone = SoftPhoneFactory.CreateSoftPhone(wybranyAdresIP, 4900, 5100);
             mediaSender = new PhoneCallAudioSender();
             mediaReceiver = new PhoneCallAudioReceiver();
@@ -139,10 +61,10 @@ namespace SuperIP_Phone
             if (e.State == RegState.NotRegistered || e.State == RegState.Error)
                 //((MainWindow)Application.Current.MainWindow).label.Content += "\nRegistration failed!";
 
-            if (e.State == RegState.RegistrationSucceeded)
-            {
-                //((MainWindow)Application.Current.MainWindow).label.Content += "\nRegistration succeeded - Online!";
-            }
+                if (e.State == RegState.RegistrationSucceeded)
+                {
+                    //((MainWindow)Application.Current.MainWindow).label.Content += "\nRegistration succeeded - Online!";
+                }
         }
 
         private static void StartCall(string numberToDial)
@@ -215,6 +137,25 @@ namespace SuperIP_Phone
         private void ZakonczNasluchbutton_Click(object sender, RoutedEventArgs e)
         {
             ZablokowacUI(true);
+        }
+
+        private void Wylogujbutton_Click(object sender, RoutedEventArgs e)
+        {
+            baza_danych.usun_adres_IP();
+            Application.Current.MainWindow.Title = "SuperIP Phone";
+            var StronaLogowania = new Logowanie();
+            NavigationService nav = NavigationService.GetNavigationService(this);
+            nav.Navigate(StronaLogowania);
+        }
+
+        private void Ustawieniabutton_Click(object sender, RoutedEventArgs e)
+        {
+            Ustawienia OknoUstawien = new Ustawienia();
+            Application.Current.MainWindow.Visibility = Visibility.Hidden;
+            OknoUstawien.ShowDialog();
+            Application.Current.MainWindow.Visibility = Visibility.Visible;
+            microphone = (Microphone)Application.Current.Properties["WejscieAudio"];
+            speaker = (Speaker)Application.Current.Properties["WyjscieAudio"];
         }
     }
 }

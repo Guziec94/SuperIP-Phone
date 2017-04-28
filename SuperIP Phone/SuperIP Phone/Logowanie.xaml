@@ -17,6 +17,7 @@
         <Label x:Name="zaloz_konto_label" Content="Nie masz konta? Zarejestruj się." HorizontalAlignment="Center" Margin="0,450,0,0" VerticalAlignment="Top" PreviewMouseDown="zaloz_konto_label_PreviewMouseDown" Height="32" Width="270" Foreground="White" FontSize="16" HorizontalContentAlignment="Center"/>
         <Label x:Name="label3" Content="SIP Phone" HorizontalAlignment="Center" Height="109" Margin="194,10,188,0" VerticalAlignment="Top" Width="418" FontSize="80" Foreground="White" FontWeight="SemiBold" FontFamily="Microsoft YaHei"/>
 
+        <ComboBox x:Name="AdresIPcomboBox" HorizontalAlignment="Left" Margin="335,487,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="AdresIPcomboBox_SelectionChanged"/>
 
     </Grid>
 </Page>

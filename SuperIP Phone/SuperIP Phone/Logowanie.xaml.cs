@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ozeki.Media;
+using System;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SuperIP_Phone
 {
@@ -26,6 +20,36 @@ namespace SuperIP_Phone
         {
             InitializeComponent();
             baza_danych.polacz_z_baza();
+            WyborAdresuIP();
+            WybierzDomyslnySprzet();
+        }
+
+        private void WybierzDomyslnySprzet()
+        {
+            while (Microphone.GetDevicesCount() == 0)
+            {
+                if (MessageBox.Show("Brak wejściowego urządzenia audio, bez odpowiedniego sprzętu aplikacja nie będzie działać. Podłącz mikrofon i naciśnij Tak, aby kontynuować. Jeśli naciśniesz Nie aplikacja zostanie zamknięta.", "Brak odpowiedniego sprzętu", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.No)
+                {
+                    Environment.Exit(0);
+                }
+            }
+            while (Speaker.GetDevicesCount() == 0)
+            {
+                if (MessageBox.Show("Brak wyjściowego urządzenia audio, bez odpowiedniego sprzętu aplikacja nie będzie działać. Podłącz głośniki lub słuchawki i naciśnij Tak, aby kontynuować. Jeśli naciśniesz Nie aplikacja zostanie zamknięta.", "Brak odpowiedniego sprzętu", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.No)
+                {
+                    Environment.Exit(0);
+                }
+            }
+            if (Application.Current.Properties["WejscieAudio"] == null)
+            {
+                Application.Current.Properties["WejscieAudio"] = Microphone.GetDefaultDevice();
+            }
+            if (Application.Current.Properties["WyjscieAudio"] == null)
+            {
+                Speaker glosnik = Speaker.GetDefaultDevice();
+                glosnik.Volume = 1;
+                Application.Current.Properties["WyjscieAudio"] = glosnik;
+            }
         }
 
         private void zaloz_konto_label_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -38,10 +62,12 @@ namespace SuperIP_Phone
         private void zaloguj_button_Click(object sender, RoutedEventArgs e)
         {
             string login = login_textBox.Text;
+            App.Current.Properties["Login"] = login;
             if (login != "" && passwordBox.Password != "") 
             {
                 if(baza_danych.zaloguj(login, passwordBox.Password))
                 {
+                    baza_danych.wprowadz_adres_IP();
                     var strona_glowna = new StronaGlowna();
                     NavigationService nav = NavigationService.GetNavigationService(this);
                     nav.Navigate(strona_glowna);
@@ -55,6 +81,27 @@ namespace SuperIP_Phone
             {
                 MessageBox.Show("Login ani hasło nie może być puste.", "Uzupełnij wymagane pola", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        private void WyborAdresuIP()
+        {
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
+                {
+                    if (ip.IsDnsEligible)
+                    {
+                        AdresIPcomboBox.Items.Add(ip.Address.ToString());
+                    }
+                }
+            }
+            AdresIPcomboBox.SelectedIndex = 0;
+        }
+
+        private void AdresIPcomboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string wybraneIP = AdresIPcomboBox.SelectedItem as string;
+            Application.Current.Properties["AdresIP"] = wybraneIP;
         }
     }
 }

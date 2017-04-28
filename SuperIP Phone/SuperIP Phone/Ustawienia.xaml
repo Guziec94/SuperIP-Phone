@@ -1,0 +1,28 @@
+﻿<Window x:Class="SuperIP_Phone.Ustawienia"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SuperIP_Phone"
+        mc:Ignorable="d"
+        Background="#FF3A86FF" Title="Ustawienia" 
+        ResizeMode="CanMinimize" Height="400" Width="450"
+        Closing="Window_Closing">
+    <Grid>
+        <Label x:Name="WejscieAudiolabel" Content="Wejście audio:" HorizontalAlignment="Left" Margin="25,25,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <ComboBox x:Name="AudioINcomboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="233" VerticalContentAlignment="Center" SelectionChanged="AudioINcomboBox_SelectionChanged" Height="37" Margin="188,25,0,0"/>
+
+        <Label x:Name="GlosnoscWejscialabel" Content="Głośność wejścia:" HorizontalAlignment="Left" Margin="25,73,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Slider x:Name="Mikrofonslider" HorizontalAlignment="Left" Margin="188,80,0,0" VerticalAlignment="Top" Width="233" ValueChanged="Mikrofonslider_ValueChanged" Maximum="100" Height="19" ToolTip="Suwak zmienia głośność wejścia audio w całym systemie."/>
+
+        <Button x:Name="TestMikrofonubutton" Content="Testuj wejście audio" HorizontalAlignment="Center" Margin="0,125,0,0" VerticalAlignment="Top" Height="40" Background="#FFFB6A33" Click="TestMikrofonubutton_Click" FontSize="20" Width="255"/>
+
+        <Label x:Name="WyjscieAudiolabel" Content="Wyjście audio:" HorizontalAlignment="Left" Margin="25,205,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <ComboBox x:Name="AudioOUTcomboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="233" VerticalContentAlignment="Center" Margin="188,205,0,0" SelectionChanged="AudioOUTcomboBox_SelectionChanged" Height="37"/>
+
+        <Label x:Name="GlosnoscWyjscialabel" Content="Głośność wyjścia:" HorizontalAlignment="Left" Margin="25,253,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Slider x:Name="Glosnikslider"  HorizontalAlignment="Left" Margin="188,260,0,0" VerticalAlignment="Top" Width="233" ValueChanged="Glosnikslider_ValueChanged" Maximum="100" Height="19" ToolTip="Suwak zmienia głośność wyjścia audio tylko w tej aplikacji."/>
+
+        <Button x:Name="TestGlosnikabutton" Content="Testuj wyjście audio" HorizontalAlignment="Center" Margin="0,295,0,0" VerticalAlignment="Top" Height="40" Background="#FFFB6A33" Click="TestGlosnikabutton_Click" FontSize="20" Width="255"/>
+    </Grid>
+</Window>
