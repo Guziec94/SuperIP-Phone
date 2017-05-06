@@ -70,6 +70,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CzyOdebrac.xaml.cs">
+      <DependentUpon>CzyOdebrac.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Kontakt.cs" />
     <Compile Include="Rejestracja.xaml.cs">
       <DependentUpon>Rejestracja.xaml</DependentUpon>
     </Compile>
@@ -79,6 +83,10 @@
     <Compile Include="Ustawienia.xaml.cs">
       <DependentUpon>Ustawienia.xaml</DependentUpon>
     </Compile>
+    <Page Include="CzyOdebrac.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Logowanie.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -1,0 +1,21 @@
+﻿<Window x:Class="SuperIP_Phone.CzyOdebrac"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SuperIP_Phone"
+        mc:Ignorable="d"
+        Title="Czy chcesz odebrać rozmowę?" 
+        Height="200" Width="400" 
+        Background="#FF3A86FF" ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing" >
+    <Grid>
+        <TextBlock Name="pytanieTextBlock" HorizontalAlignment="Center" Margin="0,10,0,75" VerticalAlignment="Center" Padding="0,5" FontSize="25" MaxWidth="350" TextWrapping="WrapWithOverflow" TextAlignment="Center">
+            Tu wstawić pytanie o odebranie rozmowy
+        </TextBlock>
+        <Button x:Name="odbierzButton" Content="Odbierz" Background="#FF009E0E" HorizontalAlignment="Left" Margin="20,85,0,0" VerticalAlignment="Center" FontSize="20" Padding="5" Width="100" Click="odbierzButton_Click" Foreground="White"/>
+        <Button x:Name="odrzucButton" Content="Odrzuć" Background="#FF8F0000" HorizontalAlignment="Right" Margin="0,85,20,0" VerticalAlignment="Center" FontSize="20" Padding="5" Width="100" Click="odrzucButton_Click" Foreground="White"/>
+
+    </Grid>
+</Window>

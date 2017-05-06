@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace SuperIP_Phone
@@ -12,7 +10,7 @@ namespace SuperIP_Phone
     public class baza_danych
     {
         public static SqlConnection cnn;
-        public static string connectionString = "Data Source=tcp:LENOVOY510P;Initial Catalog = SIPPhone; User ID = Guziec94; Password=P@ssw0rd";
+        public static string connectionString = "Data Source=tcp:LenovoY510P;Initial Catalog = SIPPhone; User ID = Guziec94; Password=P@ssw0rd";
         public static void polacz_z_baza()
         {
             cnn = new SqlConnection(connectionString);
@@ -89,7 +87,7 @@ namespace SuperIP_Phone
         {
             try
             {
-                string zapytanie = "INSERT INTO uzytkownicy (login,skrot_hasla,imie,nazwisko,id_dzialu,lista_kontaktow) VALUES (@login, @skrot_hasla, @imie, @nazwisko, @id_dzialu,@lista_kontaktow)";
+                string zapytanie = "INSERT INTO uzytkownicy (login,skrot_hasla,imie,nazwisko,id_dzialu,lista_kontaktow, adres_IP) VALUES (@login, @skrot_hasla, @imie, @nazwisko, @ID_dzialu, @adres_IP)";
                 string skrot_hasla = utworz_Sha256(haslo);
                 SqlCommand executeQuery = new SqlCommand(zapytanie, cnn);
                 executeQuery.Parameters.AddWithValue("login", login);
@@ -97,7 +95,7 @@ namespace SuperIP_Phone
                 executeQuery.Parameters.AddWithValue("imie", imie);
                 executeQuery.Parameters.AddWithValue("nazwisko", nazwisko);
                 executeQuery.Parameters.AddWithValue("id_dzialu", id_dzialu);
-                executeQuery.Parameters.AddWithValue("lista_kontaktow", "<lista_kontaktow></lista_kontaktow>");
+                executeQuery.Parameters.AddWithValue("adres_IP", " ");
                 executeQuery.ExecuteNonQuery();
                 MessageBox.Show("Konto zarejestrowane, teraz możesz się zalogować.","Sukces",MessageBoxButton.OK,MessageBoxImage.Information);
                 return true;
@@ -119,7 +117,7 @@ namespace SuperIP_Phone
         public static bool zaloguj(string login, string haslo)
         {
             string skrot_hasla = utworz_Sha256(haslo);
-            string zapytanie = "select skrot_hasla from uzytkownicy where login = @login";
+            string zapytanie = "select skrot_hasla, imie, nazwisko, d.nazwa_dzialu from uzytkownicy u join dzialy d on d.ID_dzialu = u.ID_dzialu where login = @login";
             try
             {
                 SqlCommand executeQuery = new SqlCommand(zapytanie, cnn);
@@ -132,6 +130,8 @@ namespace SuperIP_Phone
                         {
                             if (skrot_hasla == readerQuery.GetString(0))
                             {
+                                Kontakt zalogowany = new Kontakt(login, readerQuery.GetString(1), readerQuery.GetString(2), readerQuery.GetString(3), Application.Current.Properties["AdresIP"].ToString());
+                                Application.Current.Properties["ZalogowanyUzytkownik"] = zalogowany;
                                 return true;
                             }
                             else
@@ -152,7 +152,7 @@ namespace SuperIP_Phone
 
         public static void wprowadz_adres_IP()
         {
-            string zapytanie = "Update uzytkownicy set AdresIP = @AdresIP where login = @login";
+            string zapytanie = "Update uzytkownicy set adres_IP = @AdresIP where login = @login";
             SqlCommand executeQuery = new SqlCommand(zapytanie, cnn);
             executeQuery.Parameters.AddWithValue("login", Application.Current.Properties["Login"]);
             executeQuery.Parameters.AddWithValue("AdresIP", Application.Current.Properties["AdresIP"]);
@@ -161,10 +161,45 @@ namespace SuperIP_Phone
 
         public static void usun_adres_IP()
         {
-            string zapytanie = "Update uzytkownicy set AdresIP = NULL where login = @login";
+            string zapytanie = "Update uzytkownicy set adres_IP = ' ' where login = @login";
             SqlCommand executeQuery = new SqlCommand(zapytanie, cnn);
             executeQuery.Parameters.AddWithValue("login", Application.Current.Properties["Login"]);
             executeQuery.ExecuteNonQuery();
+        }
+
+        internal static List<Kontakt> pobierz_liste_kontaktow()
+        {
+            string zapytanie = "select login, imie, nazwisko, d.nazwa_dzialu, adres_IP from uzytkownicy u join dzialy d on d.ID_dzialu = u.ID_dzialu where login in (SELECT Value FROM STRING_SPLIT((select lista_kontaktow from uzytkownicy where login = @login), ','))";
+            SqlCommand executeQuery = new SqlCommand(zapytanie, cnn);
+            executeQuery.Parameters.AddWithValue("login", Application.Current.Properties["Login"]);
+            List<Kontakt> lista_kontaktow = new List<Kontakt>();
+            using (executeQuery)
+            {
+                try
+                {
+                    using (SqlDataReader readerQuery = executeQuery.ExecuteReader())
+                    {
+                        while (readerQuery.Read())
+                        {
+                            lista_kontaktow.Add(new Kontakt(readerQuery.GetString(0), readerQuery.GetString(1), readerQuery.GetString(2), readerQuery.GetString(3), readerQuery.GetString(4)));
+                        }
+                        readerQuery.Close();
+                        if (lista_kontaktow.Count > 0)
+                        {
+                            return lista_kontaktow;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Wystąpił nieoczekiwany błąd!\n" + ex.Message);
+                    return null;
+                }
+            }
         }
     }
 }
