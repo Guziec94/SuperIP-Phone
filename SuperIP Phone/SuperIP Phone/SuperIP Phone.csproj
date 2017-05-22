@@ -83,6 +83,9 @@
     <Compile Include="Ustawienia.xaml.cs">
       <DependentUpon>Ustawienia.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WyszukajKontakty.xaml.cs">
+      <DependentUpon>WyszukajKontakty.xaml</DependentUpon>
+    </Compile>
     <Page Include="CzyOdebrac.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,6 +119,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ustawienia.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WyszukajKontakty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,6 +1,5 @@
 ﻿using Ozeki.Media;
 using System;
-using System.Net;
 using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,15 +39,15 @@ namespace SuperIP_Phone
                     Environment.Exit(0);
                 }
             }
-            if (Application.Current.Properties["WejscieAudio"] == null)
+            if (System.Windows.Application.Current.Properties["WejscieAudio"] == null)
             {
-                Application.Current.Properties["WejscieAudio"] = Microphone.GetDefaultDevice();
+                System.Windows.Application.Current.Properties["WejscieAudio"] = Microphone.GetDefaultDevice();
             }
-            if (Application.Current.Properties["WyjscieAudio"] == null)
+            if (System.Windows.Application.Current.Properties["WyjscieAudio"] == null)
             {
                 Speaker glosnik = Speaker.GetDefaultDevice();
                 glosnik.Volume = 1;
-                Application.Current.Properties["WyjscieAudio"] = glosnik;
+                System.Windows.Application.Current.Properties["WyjscieAudio"] = glosnik;
             }
         }
 
@@ -62,13 +61,13 @@ namespace SuperIP_Phone
         private void zaloguj_button_Click(object sender, RoutedEventArgs e)
         {
             string login = login_textBox.Text;
-            App.Current.Properties["Login"] = login;
             if (login != "" && passwordBox.Password != "") 
             {
                 if(baza_danych.zaloguj(login, passwordBox.Password))
                 {
                     baza_danych.wprowadz_adres_IP();
                     var strona_glowna = new StronaGlowna();
+                    System.Windows.Application.Current.Properties["strona_glowna"] = strona_glowna;//używane przez baza_danych.cs by móc wywoływać metody z StronaGlowna.cs
                     NavigationService nav = NavigationService.GetNavigationService(this);
                     nav.Navigate(strona_glowna);
                 }
@@ -101,7 +100,7 @@ namespace SuperIP_Phone
         private void AdresIPcomboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string wybraneIP = AdresIPcomboBox.SelectedItem as string;
-            Application.Current.Properties["AdresIP"] = wybraneIP;
+            System.Windows.Application.Current.Properties["AdresIP"] = wybraneIP;
         }
     }
 }

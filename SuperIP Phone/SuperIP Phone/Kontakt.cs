@@ -28,11 +28,11 @@
         {
             if (AdresIP != "")
             {
-                return login + "\n" + imie + " " + nazwisko + "\n" + dzial + "\n" + AdresIP;
+                return login + "\n" + nazwisko + " " + imie + "\n" + dzial + "\n" + AdresIP;
             }
             else
             {
-                return login + "\n" + imie + " " + nazwisko + "\n" + dzial;
+                return login + "\n" + nazwisko + " " + imie + "\n" + dzial;
             }
         }
     }

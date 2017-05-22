@@ -29,7 +29,7 @@ namespace SuperIP_Phone
         private void WyborGlosnikow()
         {
             int i = 0;
-            speaker = (Speaker)Application.Current.Properties["WyjscieAudio"];
+            speaker = (Speaker)System.Windows.Application.Current.Properties["WyjscieAudio"];
             foreach (var device in Speaker.GetDevices())
             {
                 AudioOUTcomboBox.Items.Add(device);
@@ -44,7 +44,7 @@ namespace SuperIP_Phone
         private void WyborMikrofonu()
         {
             int i = 0;
-            microphone = (Microphone)Application.Current.Properties["WejscieAudio"];
+            microphone = (Microphone)System.Windows.Application.Current.Properties["WejscieAudio"];
             foreach (var device in Microphone.GetDevices())
             {
                 AudioINcomboBox.Items.Add(device);
@@ -138,8 +138,8 @@ namespace SuperIP_Phone
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Application.Current.Properties["WejscieAudio"] = microphone;
-            Application.Current.Properties["WyjscieAudio"] = speaker;
+            System.Windows.Application.Current.Properties["WejscieAudio"] = microphone;
+            System.Windows.Application.Current.Properties["WyjscieAudio"] = speaker;
         }
     }
 }

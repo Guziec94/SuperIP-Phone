@@ -1,12 +1,10 @@
 ﻿using Ozeki.Media;
 using Ozeki.VoIP;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Navigation;
 
 namespace SuperIP_Phone
@@ -16,7 +14,7 @@ namespace SuperIP_Phone
     /// </summary>
     public partial class StronaGlowna : Page
     {
-        Kontakt zalogowanyUzytkownik = (Kontakt)Application.Current.Properties["ZalogowanyUzytkownik"];
+        Kontakt zalogowanyUzytkownik = (Kontakt)System.Windows.Application.Current.Properties["ZalogowanyUzytkownik"];
         ISoftPhone softphone;   // softphone object
         IPhoneLine phoneLine;   // phoneline object
         IPhoneCall call;
@@ -32,28 +30,37 @@ namespace SuperIP_Phone
         public StronaGlowna()
         {
             InitializeComponent();
-            //ZablokowacUI(true);
-            microphone = (Microphone)Application.Current.Properties["WejscieAudio"];
-            speaker = (Speaker)Application.Current.Properties["WyjscieAudio"];
-            listaKontaktow = baza_danych.pobierz_liste_kontaktow();
-            if (listaKontaktow != null)
-            {
-                foreach (Kontakt k in listaKontaktow)
-                {
-                    if (k.AdresIP != "")
-                    {
-                        ListaKontaktowlistBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = true });
-                    }
-                    else
-                    {
-                        ListaKontaktowlistBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = false });
-                    }
-                }
-            }
+            microphone = (Microphone)System.Windows.Application.Current.Properties["WejscieAudio"];
+            speaker = (Speaker)System.Windows.Application.Current.Properties["WyjscieAudio"];
+            OdswiezListeKontaktow();
             watekDoRozmow = new Thread(Nasluchuj);
             watekDoRozmow.Start();
+            baza_danych.broker();
         }
 
+        public void OdswiezListeKontaktow()
+        {
+            Application.Current.Dispatcher.Invoke(() => {
+                ListaKontaktowlistBox.Items.Clear();
+                listaKontaktow = baza_danych.pobierz_liste_kontaktow();
+                if (listaKontaktow != null)
+                {
+                    foreach (Kontakt k in listaKontaktow)
+                    {
+                        if (k.AdresIP != "")
+                        {
+                            ListaKontaktowlistBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = true });
+                        }
+                        else
+                        {
+                            ListaKontaktowlistBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = false });
+                        }
+                    }
+                }
+            });
+        }
+
+        #region funkcje dotyczące rozmowy
         private void Nasluchujbutton_Click(object sender, RoutedEventArgs e)
         {
             watekDoRozmow = new Thread(Nasluchuj);
@@ -72,7 +79,7 @@ namespace SuperIP_Phone
             phoneLine.RegistrationStateChanged += line_RegStateChanged;
             phoneLine.SIPAccount.UserName = zalogowanyUzytkownik.login;
             phoneLine.SIPAccount.DisplayName = zalogowanyUzytkownik.imie + " " + zalogowanyUzytkownik.nazwisko;
-            Application.Current.Dispatcher.Invoke(() => { Application.Current.MainWindow.Title = "SuperIP Phone - " + zalogowanyUzytkownik.login + "@" + zalogowanyUzytkownik.AdresIP + ":" + phoneLine.SIPAccount.DomainServerPort; });//ustawienie nazwy okna
+            System.Windows.Application.Current.Dispatcher.Invoke(() => { System.Windows.Application.Current.MainWindow.Title = "SuperIP Phone - " + zalogowanyUzytkownik.login + "@" + zalogowanyUzytkownik.AdresIP + ":" + phoneLine.SIPAccount.DomainServerPort; });//ustawienie nazwy okna
             softphone.IncomingCall += softphone_IncomingCall;
             softphone.RegisterPhoneLine(phoneLine);
         }
@@ -117,7 +124,7 @@ namespace SuperIP_Phone
 
         private void softphone_IncomingCall(object sender, VoIPEventArgs<IPhoneCall> e)
         {
-            Application.Current.Dispatcher.Invoke(()=> { 
+            System.Windows.Application.Current.Dispatcher.Invoke(()=> {
                 call = e.Item;
                 caller = call.DialInfo.CallerDisplay;
                 call.CallStateChanged += call_CallStateChanged;
@@ -180,12 +187,14 @@ namespace SuperIP_Phone
             watekDoRozmow.Abort();
             watekDoRozmow = null;
         }
+    #endregion
 
         private void Wylogujbutton_Click(object sender, RoutedEventArgs e)
         {
             baza_danych.usun_adres_IP();
             ZakonczNasluch();
-            Application.Current.MainWindow.Title = "SuperIP Phone";
+            System.Windows.Application.Current.MainWindow.Title = "SuperIP Phone";
+            baza_danych.broker_stop();
             var StronaLogowania = new Logowanie();
             NavigationService nav = NavigationService.GetNavigationService(this);
             nav.Navigate(StronaLogowania);
@@ -194,11 +203,11 @@ namespace SuperIP_Phone
         private void Ustawieniabutton_Click(object sender, RoutedEventArgs e)
         {
             Ustawienia OknoUstawien = new Ustawienia();
-            Application.Current.MainWindow.Visibility = Visibility.Hidden;
+            System.Windows.Application.Current.MainWindow.Visibility = Visibility.Hidden;
             OknoUstawien.ShowDialog();
-            Application.Current.MainWindow.Visibility = Visibility.Visible;
-            microphone = (Microphone)Application.Current.Properties["WejscieAudio"];
-            speaker = (Speaker)Application.Current.Properties["WyjscieAudio"];
+            System.Windows.Application.Current.MainWindow.Visibility = Visibility.Visible;
+            microphone = (Microphone)System.Windows.Application.Current.Properties["WejscieAudio"];
+            speaker = (Speaker)System.Windows.Application.Current.Properties["WyjscieAudio"];
         }
 
         private void ListaKontaktowlistBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -221,7 +230,10 @@ namespace SuperIP_Phone
 
         private void DodajZnajomegobutton_Click(object sender, RoutedEventArgs e)
         {
-
+            WyszukajKontakty OknoWyszukiwaniaKontaktow = new WyszukajKontakty();
+            System.Windows.Application.Current.MainWindow.Visibility = Visibility.Hidden;
+            OknoWyszukiwaniaKontaktow.ShowDialog();
+            System.Windows.Application.Current.MainWindow.Visibility = Visibility.Visible;
         }
     }
 }
