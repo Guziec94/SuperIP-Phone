@@ -8,7 +8,7 @@
         Title="Wyszukaj i dodaj kontakty" 
         Height="400" Width="450" 
         Background="#FF3A86FF" ResizeMode="NoResize" 
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Grid>
         <Label Name="teskt_Label" Content="Wyszukiwarka kontaktów" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Padding="0,5" FontSize="25" HorizontalContentAlignment="Center"/>
 
@@ -26,10 +26,10 @@
 
         <Button x:Name="WyszukajKontakty_button" Content="Wyszukaj kontakty" HorizontalAlignment="Center" Margin="0,265,0,0" VerticalAlignment="Top" Width="230" Background="#FFFB6A33" Height="51" FontSize="25" FontWeight="SemiBold" Click="WyszukajKontakty_button_Click"/>
 
-        <ItemsControl Name="ZnalezioneKontakty_ListBox" HorizontalAlignment="Left" Height="300" Margin="15,321,0,-250.6" VerticalAlignment="Top" Width="398" FontSize="18" VerticalContentAlignment="Center" Visibility="Hidden">
+        <ItemsControl Name="ZnalezioneKontakty_ItemsControl" HorizontalAlignment="Left" Height="300" Margin="15,320,0,0" VerticalAlignment="Top" Width="398" FontSize="18" VerticalContentAlignment="Center" Visibility="Collapsed" BorderBrush="Black" BorderThickness="1">
             <ItemsControl.Template>
                 <ControlTemplate>
-                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" Background="#FFFB6A33" VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="Visible">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>

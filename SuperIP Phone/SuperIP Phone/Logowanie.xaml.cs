@@ -65,7 +65,7 @@ namespace SuperIP_Phone
             {
                 if(baza_danych.zaloguj(login, passwordBox.Password))
                 {
-                    baza_danych.wprowadz_adres_IP();
+                    baza_danych.ustaw_status(true);
                     var strona_glowna = new StronaGlowna();
                     System.Windows.Application.Current.Properties["strona_glowna"] = strona_glowna;//używane przez baza_danych.cs by móc wywoływać metody z StronaGlowna.cs
                     NavigationService nav = NavigationService.GetNavigationService(this);

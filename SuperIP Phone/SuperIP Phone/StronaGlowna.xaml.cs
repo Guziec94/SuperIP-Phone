@@ -5,7 +5,10 @@ using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
+using System;
+using System.Windows.Input;
 
 namespace SuperIP_Phone
 {
@@ -41,7 +44,7 @@ namespace SuperIP_Phone
         public void OdswiezListeKontaktow()
         {
             Application.Current.Dispatcher.Invoke(() => {
-                ListaKontaktowlistBox.Items.Clear();
+                /*ListaKontaktow_ListBox.Items.Clear();
                 listaKontaktow = baza_danych.pobierz_liste_kontaktow();
                 if (listaKontaktow != null)
                 {
@@ -49,15 +52,73 @@ namespace SuperIP_Phone
                     {
                         if (k.AdresIP != "")
                         {
-                            ListaKontaktowlistBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = true });
+                            ListaKontaktow_ListBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = true });
                         }
                         else
                         {
-                            ListaKontaktowlistBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = false });
+                            ListaKontaktow_ListBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = false });
                         }
+                    }
+                }*/
+                listaKontaktow = baza_danych.pobierz_liste_kontaktow();
+                ListaKontaktow_ItemsControl.Visibility = Visibility.Visible;
+                ListaKontaktow_ItemsControl.Items.Clear();
+
+                if (listaKontaktow != null)
+                {
+                    foreach (var kontakt in listaKontaktow)
+                    {
+                        StackPanel zawartosc_listbox = new StackPanel()
+                        {
+                            Background = kontakt.AdresIP != "" ? new SolidColorBrush(Colors.LightGreen) : new SolidColorBrush(Colors.Red),//new BrushConverter().ConvertFromString("#FFFB6A33") as SolidColorBrush
+                            MaxHeight = 400,
+                            Margin = new Thickness(0, 0, 0, 5),
+                            Width = ListaKontaktow_ItemsControl.Width - 18,
+                            Orientation = Orientation.Horizontal,
+                            Name = kontakt.login 
+                        };
+
+                        Button Usun_button = new Button()
+                        {
+                            Margin = new Thickness(20, 0, 0, 0),
+                            Content = "Usuń",
+                            Width = 70,
+                            Height = 70,
+                            Name = kontakt.login
+                        };
+                        Usun_button.Click += Usun_button_Clicked;//podłączenie funkcji usuwającej kontakt
+
+                        TextBlock dane_kontaktu = new TextBlock()
+                        {
+                            Padding = new Thickness(10, 5, 0, 5),
+                            Text = kontakt.ToString(),
+                            Width = zawartosc_listbox.Width * 0.75,
+                            TextWrapping = TextWrapping.WrapWithOverflow,
+                            Name = kontakt.login
+                        };
+                        dane_kontaktu.PreviewMouseDown += ListaKontaktow_ItemsControl_SelectionChanged;
+
+                        zawartosc_listbox.Children.Add(dane_kontaktu);
+                        zawartosc_listbox.Children.Add(Usun_button);
+
+                        ListaKontaktow_ItemsControl.Items.Add(zawartosc_listbox);
                     }
                 }
             });
+        }
+
+        private void ListaKontaktow_ItemsControl_SelectionChanged(object sender, MouseButtonEventArgs e)
+        {
+            Kontakt wybranyKontakt = listaKontaktow.Find(X => X.login == (sender as TextBlock).Name);
+            Status_Label.Content = wybranyKontakt.ToString();
+            DoZadzwonienia_TextBox.Text = wybranyKontakt.AdresIP;
+        }
+
+        private void Usun_button_Clicked(object sender, RoutedEventArgs e)
+        {
+            Kontakt wybranyKontakt = listaKontaktow.Find(X => X.login == (sender as Button).Name);
+            baza_danych.usun_uzytkownika_z_kontaktow(zalogowanyUzytkownik.login, wybranyKontakt.login);
+            OdswiezListeKontaktow();
         }
 
         #region funkcje dotyczące rozmowy
@@ -88,22 +149,22 @@ namespace SuperIP_Phone
         {
             if (e.State == RegState.NotRegistered || e.State == RegState.Error)
             {
-                Statuslabel.Dispatcher.Invoke(() => { Statuslabel.Content += "\nRegistration failed!"; });
+                Status_Label.Dispatcher.Invoke(() => { Status_Label.Content += "\nRegistration failed!"; });
             }
             if (e.State == RegState.RegistrationSucceeded)
             {
-                Statuslabel.Dispatcher.Invoke(() => { Statuslabel.Content += "\nRegistration succeeded - Online!"; });
+                Status_Label.Dispatcher.Invoke(() => { Status_Label.Content += "\nRegistration succeeded - Online!"; });
             }
         }
 
         private void Zadzwonbutton_Click(object sender, RoutedEventArgs e)
         {
             IPAddress temp = IPAddress.None;
-            string ipToDial = DoZadzwonieniatextBox.Text;
+            string ipToDial = DoZadzwonienia_TextBox.Text;
             if (IPAddress.TryParse(ipToDial, out temp))
             {
                 StartCall(ipToDial);
-                ZakonczRozmowebutton.IsEnabled = true;
+                ZakonczRozmowe_Button.IsEnabled = true;
             }
             else
             {
@@ -142,7 +203,7 @@ namespace SuperIP_Phone
 
         private void call_CallStateChanged(object sender, CallStateChangedArgs e)
         {
-            Statuslabel.Dispatcher.Invoke(() => { Statuslabel.Content += "\nCall state: " + e.State + " reason: " + e.Reason; });
+            Status_Label.Dispatcher.Invoke(() => { Status_Label.Content += "\nCall state: " + e.State + " reason: " + e.Reason; });
 
             if (e.State == CallState.Answered)
                 SetupDevices();
@@ -183,6 +244,7 @@ namespace SuperIP_Phone
         private void ZakonczNasluch()
         {
             softphone.Close();
+            softphone.UnregisterPhoneLine(phoneLine);
             phoneLine.Dispose();
             watekDoRozmow.Abort();
             watekDoRozmow = null;
@@ -191,7 +253,7 @@ namespace SuperIP_Phone
 
         private void Wylogujbutton_Click(object sender, RoutedEventArgs e)
         {
-            baza_danych.usun_adres_IP();
+            baza_danych.ustaw_status(false);
             ZakonczNasluch();
             System.Windows.Application.Current.MainWindow.Title = "SuperIP Phone";
             baza_danych.broker_stop();
@@ -210,14 +272,6 @@ namespace SuperIP_Phone
             speaker = (Speaker)System.Windows.Application.Current.Properties["WyjscieAudio"];
         }
 
-        private void ListaKontaktowlistBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ListBoxItem wybranyItem= (ListBoxItem)ListaKontaktowlistBox.SelectedItem;
-            Kontakt wybranyKontakt = (Kontakt)wybranyItem.Content;
-            Statuslabel.Content = wybranyKontakt.ToString();
-            DoZadzwonieniatextBox.Text = wybranyKontakt.AdresIP;
-        }
-
         private void ZakonczRozmowebutton_Click(object sender, RoutedEventArgs e)
         {
             if(call!=null)
@@ -232,8 +286,24 @@ namespace SuperIP_Phone
         {
             WyszukajKontakty OknoWyszukiwaniaKontaktow = new WyszukajKontakty();
             System.Windows.Application.Current.MainWindow.Visibility = Visibility.Hidden;
-            OknoWyszukiwaniaKontaktow.ShowDialog();
+            if (OknoWyszukiwaniaKontaktow.ShowDialog().Value == true)
+            {
+                OdswiezListeKontaktow();
+            }
             System.Windows.Application.Current.MainWindow.Visibility = Visibility.Visible;
+        }
+
+        private void UsunKonto_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Czy na pewno chcesz usunąć swoje konto? Ta operacja jest nieodwracalna", "Czy jesteś pewien?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                baza_danych.usun_konto();
+                System.Windows.Application.Current.MainWindow.Title = "SuperIP Phone";
+                baza_danych.broker_stop();
+                var StronaLogowania = new Logowanie();
+                NavigationService nav = NavigationService.GetNavigationService(this);
+                nav.Navigate(StronaLogowania);
+            }
         }
     }
 }

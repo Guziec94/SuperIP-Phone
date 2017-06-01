@@ -189,21 +189,31 @@ namespace SuperIP_Phone
             return false;
         }
 
-        public static void wprowadz_adres_IP()
-        {
-            string zapytanie = "Update uzytkownicy set adres_IP = @AdresIP where login = @login";
-            SqlCommand executeQuery = new SqlCommand(zapytanie, cnn);
+        public static void ustaw_status(bool czy_zalogowany)//Funkcja ustawiająca status użytkownika.
+        { 
+            string zapytanie;
+            SqlCommand executeQuery;
+            if (czy_zalogowany)//uzytkownik wlasnie sie zalogowal - ustawiamy status na dostepny wpisujac do bazy jego IP
+            {
+                zapytanie = "Update uzytkownicy set adres_IP = @AdresIP where login = @login;update lista_zdarzen set przeladuj_kontakty=1 where login in (select login from uzytkownicy where login in (SELECT Value FROM STRING_SPLIT((select lista_kontaktow from uzytkownicy where login = @login), ',')) and adres_IP != ' ')";
+                executeQuery = new SqlCommand(zapytanie, cnn);
+                executeQuery.Parameters.AddWithValue("AdresIP", System.Windows.Application.Current.Properties["AdresIP"]);
+            }
+            else//uzytkownik sie wylogowal/zamknął aplikację - usuwamy jego adres z bazy danych
+            {
+                zapytanie = "Update uzytkownicy set adres_IP = ' ' where login = @login; update lista_zdarzen set przeladuj_kontakty=1 where login in (select login from uzytkownicy where login in (SELECT Value FROM STRING_SPLIT((select lista_kontaktow from uzytkownicy where login = @login), ',')) and adres_IP != ' ')";
+                executeQuery = new SqlCommand(zapytanie, cnn);
+            }
             executeQuery.Parameters.AddWithValue("login", ((Kontakt)Application.Current.Properties["ZalogowanyUzytkownik"]).login);
-            executeQuery.Parameters.AddWithValue("AdresIP", System.Windows.Application.Current.Properties["AdresIP"]);
             executeQuery.ExecuteNonQuery();
         }
-
-        public static void usun_adres_IP()
+        
+        public static void usun_konto()
         {
-            string zapytanie = "Update uzytkownicy set adres_IP = ' ' where login = @login";
-            SqlCommand executeQuery = new SqlCommand(zapytanie, cnn);
-            executeQuery.Parameters.AddWithValue("login", ((Kontakt)Application.Current.Properties["ZalogowanyUzytkownik"]).login);
-            executeQuery.ExecuteNonQuery();
+            string zapytanie = "delete from uzytkownicy where login=@login; delete from lista_zdarzen where login=@login; delete from lista_oczekujacych where login_dodajacego = @login or login_dodawanego = @login;";
+            SqlCommand deleteQuery = new SqlCommand(zapytanie, cnn);
+            deleteQuery.Parameters.AddWithValue("login", ((Kontakt)Application.Current.Properties["ZalogowanyUzytkownik"]).login);
+            deleteQuery.ExecuteNonQuery();
         }
 
         internal static List<Kontakt> pobierz_liste_kontaktow()
@@ -278,6 +288,24 @@ namespace SuperIP_Phone
                     return null;
                 }
             }
+        }
+
+        public static void dodaj_uzytkownika_do_kontaktow(string login_dodajacego, string login_dodawanego)//funkcja dopisuje do listy kontaktów użytkownika login_dodajacego nowy kontakt, którym jest login_dodawanego
+        {
+            string zapytanie = "update uzytkownicy set lista_kontaktow=Concat((select top(1) lista_kontaktow FROM uzytkownicy where login=@login_dodajacego), @login_dodawanego) where login=@login_dodajacego";
+            SqlCommand query = new SqlCommand(zapytanie, cnn);
+            query.Parameters.AddWithValue("login_dodajacego", login_dodajacego);
+            query.Parameters.AddWithValue("login_dodawanego", ","+ login_dodawanego);//login_dodawanego jest wstawiany na końcu listy, dlatego jest on poprzedzony przecinkiem
+            query.ExecuteNonQuery();
+        }
+
+        public static void usun_uzytkownika_z_kontaktow(string login_usuwajacego, string login_usuwanego)//funkcja dopisuje do listy kontaktów użytkownika login_dodajacego nowy kontakt, którym jest login_dodawanego
+        {
+            string zapytanie = "DECLARE @Logins VARCHAR(MAX);SELECT @Logins = COALESCE(@Logins + ',', '') +  value from string_split((select top(1) lista_kontaktow FROM uzytkownicy where login = @login_usuwajacego), ',') where value != @login_usuwanego; Update uzytkownicy set lista_kontaktow = @Logins where login=@login_usuwajacego;";
+            SqlCommand query = new SqlCommand(zapytanie, cnn);
+            query.Parameters.AddWithValue("login_usuwajacego", login_usuwajacego);
+            query.Parameters.AddWithValue("login_usuwanego", login_usuwanego);
+            query.ExecuteNonQuery();
         }
     }
 }

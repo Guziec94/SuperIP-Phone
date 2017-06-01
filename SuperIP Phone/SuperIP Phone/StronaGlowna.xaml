@@ -9,36 +9,26 @@
       Title="StronaGlowna">
 
     <Grid>
-        <Button x:Name="Nasluchujbutton" Content="Nasluchuj" HorizontalAlignment="Left" Margin="136,459,0,0" VerticalAlignment="Top" Width="200" Click="Nasluchujbutton_Click" Height="52" FontSize="25" Background="#FFFB6A33"/>
-        <TextBox x:Name="DoZadzwonieniatextBox" HorizontalAlignment="Left" Height="23" Margin="136,431,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="Zadzwonbutton" Content="Zadzwoń" HorizontalAlignment="Left" Margin="136,516,0,0" VerticalAlignment="Top" Width="200" Click="Zadzwonbutton_Click" Height="52" FontSize="25" Background="#FF009E0E" Foreground="White" BorderThickness="5"/>
-        <Button x:Name="ZakonczNasluchbutton" Content="Zakończ nasłuch" HorizontalAlignment="Left" Margin="375,459,0,0" VerticalAlignment="Top" Width="200" Click="ZakonczNasluchbutton_Click" Height="52" FontSize="25" Background="#FFFB6A33"/>
-        <Button x:Name="ZakonczRozmowebutton" Content="Zakończ rozmowę" HorizontalAlignment="Left" Margin="375,516,0,0" VerticalAlignment="Top" Width="200" Click="ZakonczRozmowebutton_Click" Height="52" FontSize="25" Foreground="White" Background="#FF8F0000" BorderThickness="5" />
-        <Label x:Name="Zadzwonlabel" Content="Zadzwoń" HorizontalAlignment="Center" Height="89" Margin="0,10,0,0" VerticalAlignment="Top" Width="324" FontSize="70" Foreground="White" FontWeight="SemiBold" FontFamily="Microsoft YaHei"/>
-        <Label x:Name="Kontaktylabel" Content="Kontakty" HorizontalAlignment="Left" Margin="645,97,0,0" VerticalAlignment="Top" Width="120" Foreground="White" FontSize="20"/>
-        <ListBox x:Name="ListaKontaktowlistBox" HorizontalAlignment="Left" Height="416" Margin="620,152,0,0" VerticalAlignment="Top" Width="145" SelectionChanged="ListaKontaktowlistBox_SelectionChanged" Background="#FFFB6A33" BorderBrush="Black" FontSize="16" />
-        <Button x:Name="Wylogujbutton" Content="←" HorizontalAlignment="Left" Margin="25,25,0,0" VerticalAlignment="Top" Width="65" Height="65" FontSize="65" VerticalContentAlignment="Center" Padding="0,-19,0,0" Background="#FFFB6A33" Click="Wylogujbutton_Click"/>
-        <Button x:Name="Ustawieniabutton" Content="⚙" HorizontalAlignment="Right" Margin="0,25,25,0" VerticalAlignment="Top" Width="65" Height="65" FontSize="45" VerticalContentAlignment="Center" Padding="2,0,0,2" Background="#FFFB6A33" Click="Ustawieniabutton_Click"/>
-        <Label x:Name="Statuslabel" Content="Label" HorizontalAlignment="Left" Margin="25,104,0,0" VerticalAlignment="Top" Width="385" Height="322" FontSize="10"/>
-        <Button x:Name="DodajZnajomegobutton" Content="Dodaj znajomego" HorizontalAlignment="Left" Margin="415,152,0,0" VerticalAlignment="Top" Width="200" Height="52" FontSize="25" Background="#FFFB6A33" Click="DodajZnajomegobutton_Click"/>
+        <Button x:Name="Nasluchuj_Button" Content="Nasluchuj" HorizontalAlignment="Left" Margin="24,341,0,0" VerticalAlignment="Top" Width="200" Click="Nasluchujbutton_Click" Height="52" FontSize="25" Background="#FFFB6A33"/>
+        <TextBox x:Name="DoZadzwonienia_TextBox" HorizontalAlignment="Left" Height="23" Margin="24,313,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="Zadzwon_Button" Content="Zadzwoń" HorizontalAlignment="Left" Margin="24,398,0,0" VerticalAlignment="Top" Width="200" Click="Zadzwonbutton_Click" Height="52" FontSize="25" Background="#FF009E0E" Foreground="White" BorderThickness="5"/>
+        <Button x:Name="ZakonczNasluch_Button" Content="Zakończ nasłuch" HorizontalAlignment="Left" Margin="24,472,0,0" VerticalAlignment="Top" Width="200" Click="ZakonczNasluchbutton_Click" Height="52" FontSize="25" Background="#FFFB6A33"/>
+        <Button x:Name="ZakonczRozmowe_Button" Content="Zakończ rozmowę" HorizontalAlignment="Left" Margin="24,529,0,0" VerticalAlignment="Top" Width="200" Click="ZakonczRozmowebutton_Click" Height="52" FontSize="25" Foreground="White" Background="#FF8F0000" BorderThickness="5" />
+        <Label x:Name="Zadzwon_Label" Content="Zadzwoń" HorizontalAlignment="Center" Height="89" Margin="0,10,0,0" VerticalAlignment="Top" Width="324" FontSize="70" Foreground="White" FontWeight="SemiBold" FontFamily="Microsoft YaHei"/>
+        <Label x:Name="Kontakty_Label" Content="Kontakty" HorizontalAlignment="Left" Margin="645,97,0,0" VerticalAlignment="Top" Width="120" Foreground="White" FontSize="20"/>
+        <Button x:Name="Wyloguj_Button" Content="←" HorizontalAlignment="Left" Margin="25,25,0,0" VerticalAlignment="Top" Width="65" Height="65" FontSize="65" VerticalContentAlignment="Center" Padding="0,-19,0,0" Background="#FFFB6A33" Click="Wylogujbutton_Click"/>
+        <Button x:Name="Ustawienia_Button" Content="⚙" HorizontalAlignment="Right" Margin="0,25,25,0" VerticalAlignment="Top" Width="65" Height="65" FontSize="45" VerticalContentAlignment="Center" Padding="2,0,0,2" Background="#FFFB6A33" Click="Ustawieniabutton_Click"/>
+        <Label x:Name="Status_Label" Content="Label" HorizontalAlignment="Left" Margin="25,104,0,0" VerticalAlignment="Top" Width="385" Height="154" FontSize="10"/>
+        <Button x:Name="DodajZnajomego_Button" Content="Dodaj znajomego" HorizontalAlignment="Left" Margin="565,139,0,0" VerticalAlignment="Top" Width="200" Height="52" FontSize="25" Background="#FFFB6A33" Click="DodajZnajomegobutton_Click"/>
+        <Button x:Name="UsunKonto_Button"  Content="Usuń konto" HorizontalAlignment="Left" Margin="149,312,0,0" VerticalAlignment="Top" Width="75" Click="UsunKonto_Button_Click"/>
+        <ItemsControl Name="ListaKontaktow_ItemsControl" HorizontalAlignment="Left" Height="300" Margin="367,263,0,0" VerticalAlignment="Top" Width="398" FontSize="18" VerticalContentAlignment="Center">
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="Visible">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+        </ItemsControl>
     </Grid>
-
-    <Page.Resources>
-        <Style TargetType="{x:Type ListBoxItem}">
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True" >
-                    <Setter Property="FontWeight" Value="Bold" />
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False" >
-                    <Setter Property="Background" Value="PaleVioletRed" />
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="True" >
-                    <Setter Property="Background" Value="LightGreen" />
-                </Trigger>
-            </Style.Triggers>
-            <Style.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrush}" Color="#FFFB6A33"/>
-            </Style.Resources>
-        </Style>
-    </Page.Resources>
 </Page>
