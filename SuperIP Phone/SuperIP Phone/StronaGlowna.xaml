@@ -30,5 +30,6 @@
                 </ControlTemplate>
             </ItemsControl.Template>
         </ItemsControl>
+        <Label x:Name="CzasRozmowy_Label"  Content="TO TRZEBA UKRYC" HorizontalAlignment="Left" Margin="410,207,0,0" VerticalAlignment="Top" Width="100"/>
     </Grid>
 </Page>

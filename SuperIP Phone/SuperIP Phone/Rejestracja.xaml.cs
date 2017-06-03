@@ -30,18 +30,25 @@ namespace SuperIP_Phone
 
             if (login != null && passwordBox.Password != "" && imie != null && dzial.Value != null && nazwisko !="") 
             {
-                if (passwordBox.Password == passwordBox2.Password)
+                if (passwordBox.Password.Length < 8)
                 {
-                    if(baza_danych.zarejestruj(login,passwordBox.Password,imie,nazwisko,dzial.Key))
-                    {
-                        var okno_logowania = new Logowanie();
-                        NavigationService nav = NavigationService.GetNavigationService(this);
-                        nav.Navigate(okno_logowania);
-                    }
+                    MessageBox.Show("Hasło musi mieć minimum 8 znaków.");
                 }
                 else
                 {
-                    MessageBox.Show("Podane hasła się różnią.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (passwordBox.Password == passwordBox2.Password)
+                    {
+                        if (baza_danych.zarejestruj(login, passwordBox.Password, imie, nazwisko, dzial.Key))
+                        {
+                            var okno_logowania = new Logowanie();
+                            NavigationService nav = NavigationService.GetNavigationService(this);
+                            nav.Navigate(okno_logowania);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Podane hasła się różnią.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
             else

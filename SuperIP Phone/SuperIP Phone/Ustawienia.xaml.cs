@@ -1,6 +1,7 @@
 ﻿using Ozeki.Media;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -11,16 +12,16 @@ namespace SuperIP_Phone
     /// </summary>
     public partial class Ustawienia : Window
     {
-        MP3StreamPlayback mp3Player;
+        Ozeki.Media.WaveStreamPlayback wavePlayer;
         bool CzyUruchomionyTest;
-        Thread WatekDoTestow;
+        Task TaskDoTestow;
         Microphone microphone;
         Speaker speaker;
 
         public Ustawienia()
         {
             InitializeComponent();
-            mp3Player = new MP3StreamPlayback("../../Resources/ding.mp3");
+            wavePlayer = new WaveStreamPlayback("C:/Windows/Media/Alarm05.wav");
             CzyUruchomionyTest = false;
             WyborMikrofonu();
             WyborGlosnikow();
@@ -68,35 +69,49 @@ namespace SuperIP_Phone
 
         private void TestGlosnikabutton_Click(object sender, RoutedEventArgs e)
         {
-            if (mp3Player.IsStreaming != true && speaker != null)
+            if (!CzyUruchomionyTest)
             {
-                try
+                CzyUruchomionyTest = true;
+                TaskDoTestow = new Task(() =>
                 {
                     MediaConnector mediaConnector = new MediaConnector();
 
-                    mediaConnector.Connect(mp3Player, speaker);
-                    mp3Player.Start();
+                    mediaConnector.Connect(wavePlayer, speaker);
+                    wavePlayer.Start();
                     speaker.Start();
+                    TestGlosnikabutton.Dispatcher.Invoke(() => {
+                        TestGlosnikabutton.Content = "Zatrzymaj test";
+                        TestMikrofonubutton.IsEnabled = false;
+                    });
 
-                    while (mp3Player.IsStreaming) ;
+                    while (wavePlayer.IsStreaming && CzyUruchomionyTest == true) ;
 
-                    mediaConnector.Disconnect(mp3Player, speaker);
-                    mp3Player.Stop();
+                    mediaConnector.Disconnect(wavePlayer, speaker);
+                    wavePlayer.Stop();
                     speaker.Stop();
-
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message);
-                }
+                    TestGlosnikabutton.Dispatcher.Invoke(() => {
+                        TestGlosnikabutton.Content = "Testuj wejście audio";
+                        TestMikrofonubutton.IsEnabled = true;
+                    });
+                    CzyUruchomionyTest = false;
+                });
+                TaskDoTestow.Start();
+            }
+            else
+            {
+                CzyUruchomionyTest = false;
+                TestGlosnikabutton.Dispatcher.Invoke(() => {
+                    TestGlosnikabutton.Content = "Testuj wejście audio";
+                    TestMikrofonubutton.IsEnabled = true;
+                });
             }
         }
 
         private void TestMikrofonubutton_Click(object sender, RoutedEventArgs e)
         {
-            if (WatekDoTestow == null || (WatekDoTestow.ThreadState == ThreadState.Aborted && WatekDoTestow.ThreadState != ThreadState.AbortRequested))
+            if (!CzyUruchomionyTest)
             {
-                WatekDoTestow = new Thread(delegate ()
+                TaskDoTestow = new Task(()=>
                 {
                     MediaConnector mediaConnector = new MediaConnector();
                     mediaConnector.Connect(microphone, speaker);
@@ -107,18 +122,16 @@ namespace SuperIP_Phone
                     microphone.Stop();
                     speaker.Stop();
                 });
-            }
-            if (WatekDoTestow.IsAlive == false && (microphone != null && speaker != null))//if (CzyUruchomionyTestMikrofonu == false)
-            {
-                WatekDoTestow.Start();
+                TaskDoTestow.Start();
                 CzyUruchomionyTest = true;
                 TestMikrofonubutton.Content = "Zatrzymaj test";
+                TestGlosnikabutton.IsEnabled = false;
             }
             else
             {
                 CzyUruchomionyTest = false;
                 TestMikrofonubutton.Content = "Testuj wejście audio";
-                WatekDoTestow.Abort();
+                TestGlosnikabutton.IsEnabled = true;
             }
         }
 
@@ -138,6 +151,7 @@ namespace SuperIP_Phone
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            CzyUruchomionyTest = false;
             System.Windows.Application.Current.Properties["WejscieAudio"] = microphone;
             System.Windows.Application.Current.Properties["WyjscieAudio"] = speaker;
         }

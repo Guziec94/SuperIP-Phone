@@ -193,15 +193,15 @@ namespace SuperIP_Phone
         { 
             string zapytanie;
             SqlCommand executeQuery;
-            if (czy_zalogowany)//uzytkownik wlasnie sie zalogowal - ustawiamy status na dostepny wpisujac do bazy jego IP
+            if (czy_zalogowany)//uzytkownik wlasnie sie zalogowal - ustawiamy status na dostepny wpisujac do bazy jego IP; ustawiamy flagę przeladuj_kontakty dla jego znajomych, ktorzy sa online; 
             {
                 zapytanie = "Update uzytkownicy set adres_IP = @AdresIP where login = @login;update lista_zdarzen set przeladuj_kontakty=1 where login in (select login from uzytkownicy where login in (SELECT Value FROM STRING_SPLIT((select lista_kontaktow from uzytkownicy where login = @login), ',')) and adres_IP != ' ')";
                 executeQuery = new SqlCommand(zapytanie, cnn);
                 executeQuery.Parameters.AddWithValue("AdresIP", System.Windows.Application.Current.Properties["AdresIP"]);
             }
-            else//uzytkownik sie wylogowal/zamknął aplikację - usuwamy jego adres z bazy danych
+            else//uzytkownik sie wylogowal/zamknął aplikację - usuwamy jego adres z bazy danych; ustawiamy flagę przeladuj_kontakty dla jego znajomych, ktorzy sa online; resetujemy wszystkie flagi uzytkownika
             {
-                zapytanie = "Update uzytkownicy set adres_IP = ' ' where login = @login; update lista_zdarzen set przeladuj_kontakty=1 where login in (select login from uzytkownicy where login in (SELECT Value FROM STRING_SPLIT((select lista_kontaktow from uzytkownicy where login = @login), ',')) and adres_IP != ' ')";
+                zapytanie = "Update uzytkownicy set adres_IP = ' ' where login = @login; update lista_zdarzen set przeladuj_kontakty=1 where login in (select login from uzytkownicy where login in (SELECT Value FROM STRING_SPLIT((select lista_kontaktow from uzytkownicy where login = @login), ',')) and adres_IP != ' ');Update lista_zdarzen set przeladuj_kontakty=0 where login = @login";
                 executeQuery = new SqlCommand(zapytanie, cnn);
             }
             executeQuery.Parameters.AddWithValue("login", ((Kontakt)Application.Current.Properties["ZalogowanyUzytkownik"]).login);

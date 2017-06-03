@@ -18,6 +18,7 @@ namespace SuperIP_Phone
     public partial class StronaGlowna : Page
     {
         Kontakt zalogowanyUzytkownik = (Kontakt)System.Windows.Application.Current.Properties["ZalogowanyUzytkownik"];
+        internal List<Kontakt> listaKontaktow;
         ISoftPhone softphone;   // softphone object
         IPhoneLine phoneLine;   // phoneline object
         IPhoneCall call;
@@ -27,8 +28,9 @@ namespace SuperIP_Phone
         PhoneCallAudioSender mediaSender;
         PhoneCallAudioReceiver mediaReceiver;
         MediaConnector connector;
-        List<Kontakt> listaKontaktow;
         Thread watekDoRozmow;
+        System.Windows.Threading.DispatcherTimer stoper;
+        int uplynelo_sekund;
 
         public StronaGlowna()
         {
@@ -44,22 +46,6 @@ namespace SuperIP_Phone
         public void OdswiezListeKontaktow()
         {
             Application.Current.Dispatcher.Invoke(() => {
-                /*ListaKontaktow_ListBox.Items.Clear();
-                listaKontaktow = baza_danych.pobierz_liste_kontaktow();
-                if (listaKontaktow != null)
-                {
-                    foreach (Kontakt k in listaKontaktow)
-                    {
-                        if (k.AdresIP != "")
-                        {
-                            ListaKontaktow_ListBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = true });
-                        }
-                        else
-                        {
-                            ListaKontaktow_ListBox.Items.Add(new ListBoxItem { Content = k, IsEnabled = false });
-                        }
-                    }
-                }*/
                 listaKontaktow = baza_danych.pobierz_liste_kontaktow();
                 ListaKontaktow_ItemsControl.Visibility = Visibility.Visible;
                 ListaKontaktow_ItemsControl.Items.Clear();
@@ -103,6 +89,10 @@ namespace SuperIP_Phone
 
                         ListaKontaktow_ItemsControl.Items.Add(zawartosc_listbox);
                     }
+                }
+                else
+                {
+                    listaKontaktow = new List<Kontakt>();
                 }
             });
         }
@@ -172,9 +162,19 @@ namespace SuperIP_Phone
             }
         }
 
+        private void ZakonczRozmowebutton_Click(object sender, RoutedEventArgs e)
+        {
+            if (call != null)
+            {
+                call.HangUp();
+                CloseDevices();
+                call = null;
+            }
+        }
+
         private void StartCall(string numberToDial)
         {
-            if (call == null)
+            if (call == null || call.CallState==CallState.Completed)
             {
                 call = softphone.CreateDirectIPCallObject(phoneLine, new DirectIPDialParameters("5060"), numberToDial);
                 call.CallStateChanged += call_CallStateChanged;
@@ -206,10 +206,20 @@ namespace SuperIP_Phone
             Status_Label.Dispatcher.Invoke(() => { Status_Label.Content += "\nCall state: " + e.State + " reason: " + e.Reason; });
 
             if (e.State == CallState.Answered)
+            {
                 SetupDevices();
-
+            }
             if (e.State.IsCallEnded())
+            {
                 CloseDevices();
+                call = null;
+            }
+        }
+
+        private void Stoper_Tick(object sender, EventArgs e)
+        {
+            uplynelo_sekund++;
+            CzasRozmowy_Label.Content = TimeSpan.FromSeconds(uplynelo_sekund).ToString(@"hh\:mm\:ss");
         }
 
         private void SetupDevices()
@@ -222,6 +232,16 @@ namespace SuperIP_Phone
 
             mediaSender.AttachToCall(call);
             mediaReceiver.AttachToCall(call);
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                CzasRozmowy_Label.Visibility = Visibility.Visible;
+                uplynelo_sekund = 0;
+                stoper = new System.Windows.Threading.DispatcherTimer();
+                stoper.Interval = TimeSpan.FromSeconds(1);
+                stoper.Tick += Stoper_Tick;
+                stoper.Start();
+            });
         }
 
         private void CloseDevices()
@@ -234,6 +254,15 @@ namespace SuperIP_Phone
 
             mediaSender.Detach();
             mediaReceiver.Detach();
+
+            CzasRozmowy_Label.Dispatcher.Invoke(() =>
+            {
+                CzasRozmowy_Label.Visibility = Visibility.Hidden;
+            });
+            if (stoper != null)
+            {
+                stoper.Stop();
+            }
         }
 
         private void ZakonczNasluchbutton_Click(object sender, RoutedEventArgs e)
@@ -246,6 +275,7 @@ namespace SuperIP_Phone
             softphone.Close();
             softphone.UnregisterPhoneLine(phoneLine);
             phoneLine.Dispose();
+
             watekDoRozmow.Abort();
             watekDoRozmow = null;
         }
@@ -272,15 +302,6 @@ namespace SuperIP_Phone
             speaker = (Speaker)System.Windows.Application.Current.Properties["WyjscieAudio"];
         }
 
-        private void ZakonczRozmowebutton_Click(object sender, RoutedEventArgs e)
-        {
-            if(call!=null)
-            {
-                call.HangUp();
-                CloseDevices();
-                call = null;
-            }
-        }
 
         private void DodajZnajomegobutton_Click(object sender, RoutedEventArgs e)
         {

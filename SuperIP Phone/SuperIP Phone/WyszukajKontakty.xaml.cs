@@ -70,37 +70,40 @@ namespace SuperIP_Phone
                 {
                     foreach (var kontakt in znalezione_kontakty)
                     {
-                        StackPanel zawartosc_listbox = new StackPanel()
+                        if (kontakt.login != ((Kontakt)Application.Current.Properties["ZalogowanyUzytkownik"]).login.ToString())
                         {
-                            Background = new BrushConverter().ConvertFromString("#FFFB6A33") as SolidColorBrush,
-                            MaxHeight = 400,
-                            Margin = new Thickness(0, 0, 0, 5),
-                            Width = ZnalezioneKontakty_ItemsControl.Width - 18,
-                            Orientation = Orientation.Horizontal
-                        };
+                            StackPanel zawartosc_listbox = new StackPanel()
+                            {
+                                Background = new BrushConverter().ConvertFromString("#FFFB6A33") as SolidColorBrush,
+                                MaxHeight = 400,
+                                Margin = new Thickness(0, 0, 0, 5),
+                                Width = ZnalezioneKontakty_ItemsControl.Width - 18,
+                                Orientation = Orientation.Horizontal
+                            };
 
-                        Button dodaj_button = new Button()
-                        {
-                            Content = "Dodaj",
-                            Width = 70,
-                            Height = 70,
-                            Margin = new Thickness(20, 0, 0, 0),
-                            Name = kontakt.login
-                        };
-                        dodaj_button.Click += Dodaj_Button_Clicked;
+                            Button dodaj_button = new Button()
+                            {
+                                Content = "Dodaj",
+                                Width = 70,
+                                Height = 70,
+                                Margin = new Thickness(20, 0, 0, 0),
+                                Name = kontakt.login
+                            };
+                            dodaj_button.Click += Dodaj_Button_Clicked;
 
-                        TextBlock dane_kontaktu = new TextBlock()
-                        {
-                            Padding = new Thickness(10, 5, 0, 5),
-                            Text = kontakt.ToString(),
-                            Width = zawartosc_listbox.Width * 0.75,
-                            TextWrapping = TextWrapping.WrapWithOverflow
-                        };
+                            TextBlock dane_kontaktu = new TextBlock()
+                            {
+                                Padding = new Thickness(10, 5, 0, 5),
+                                Text = kontakt.ToString(),
+                                Width = zawartosc_listbox.Width * 0.75,
+                                TextWrapping = TextWrapping.WrapWithOverflow
+                            };
 
-                        zawartosc_listbox.Children.Add(dane_kontaktu);
-                        zawartosc_listbox.Children.Add(dodaj_button);
+                            zawartosc_listbox.Children.Add(dane_kontaktu);
+                            zawartosc_listbox.Children.Add(dodaj_button);
 
-                        ZnalezioneKontakty_ItemsControl.Items.Add(zawartosc_listbox);
+                            ZnalezioneKontakty_ItemsControl.Items.Add(zawartosc_listbox);
+                        }
                     }
                 }
                 else
@@ -125,10 +128,19 @@ namespace SuperIP_Phone
         private void Dodaj_Button_Clicked(object sender, RoutedEventArgs e)
         {
             string login_do_dodania = (sender as Button).Name;
-            if (MessageBox.Show("Czy chcesz dodać użytkownika " + login_do_dodania + " do swojej listy kontaktów?", "Czy jesteś pewny?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            Kontakt _kontakt = (((StronaGlowna)System.Windows.Application.Current.Properties["strona_glowna"]).listaKontaktow.Find(x => x.login == login_do_dodania));
+            if (_kontakt != null)
             {
-                baza_danych.dodaj_uzytkownika_do_kontaktow(((Kontakt)Application.Current.Properties["ZalogowanyUzytkownik"]).login, login_do_dodania);
-                czy_dodano_kontakt = true;
+                MessageBox.Show("Ten użytkownik istnieje już na Twojej liście kontaktów.");
+            }
+            else
+            {
+                if (MessageBox.Show("Czy chcesz dodać użytkownika " + login_do_dodania + " do swojej listy kontaktów?", "Czy jesteś pewny?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    baza_danych.dodaj_uzytkownika_do_kontaktow(((Kontakt)Application.Current.Properties["ZalogowanyUzytkownik"]).login, login_do_dodania);
+                    czy_dodano_kontakt = true;
+                    ((StronaGlowna)System.Windows.Application.Current.Properties["strona_glowna"]).listaKontaktow = baza_danych.pobierz_liste_kontaktow();
+                }
             }
         }
 
