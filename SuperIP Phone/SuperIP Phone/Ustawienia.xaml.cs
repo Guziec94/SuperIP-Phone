@@ -21,7 +21,7 @@ namespace SuperIP_Phone
         public Ustawienia()
         {
             InitializeComponent();
-            wavePlayer = new WaveStreamPlayback("C:/Windows/Media/Alarm05.wav");
+            wavePlayer = new WaveStreamPlayback("C:/Windows/Media/ding.wav");//dźwięk odtwarzany podczas testu wyjściowego urządzenia audio
             CzyUruchomionyTest = false;
             WyborMikrofonu();
             WyborGlosnikow();

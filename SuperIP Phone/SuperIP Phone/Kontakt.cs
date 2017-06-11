@@ -1,4 +1,6 @@
-﻿namespace SuperIP_Phone
+﻿using System.Collections.Generic;
+
+namespace SuperIP_Phone
 {
     class Kontakt
     {
@@ -7,9 +9,11 @@
         public string nazwisko;
         public string dzial;
         public string AdresIP;
+        public List<string> wiadomosci;
 
         public Kontakt(string login, string imie, string nazwisko, string dzial, string AdresIP)
         {
+            wiadomosci = new List<string>();
             this.login = login;
             this.imie = imie;
             this.nazwisko = nazwisko;
@@ -26,14 +30,7 @@
 
         public override string ToString()
         {
-            if (AdresIP != "")
-            {
-                return login + "\n" + nazwisko + " " + imie + "\n" + dzial + "\n" + AdresIP;
-            }
-            else
-            {
-                return login + "\n" + nazwisko + " " + imie + "\n" + dzial;
-            }
+            return string.Format("Login: {0}\n{1} {2}\nDział: {3}", login, imie, nazwisko, dzial); //login + "\n" + nazwisko + " " + imie + "\n" + dzial + "\n" + AdresIP;
         }
     }
 }

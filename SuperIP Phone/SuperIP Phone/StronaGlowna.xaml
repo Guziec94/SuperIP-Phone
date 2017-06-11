@@ -6,30 +6,39 @@
       xmlns:local="clr-namespace:SuperIP_Phone"
       mc:Ignorable="d" 
       Height="600" Width="800" 
-      Title="StronaGlowna">
+      Title="StronaGlowna" Foreground="White">
 
     <Grid>
-        <Button x:Name="Nasluchuj_Button" Content="Nasluchuj" HorizontalAlignment="Left" Margin="24,341,0,0" VerticalAlignment="Top" Width="200" Click="Nasluchujbutton_Click" Height="52" FontSize="25" Background="#FFFB6A33"/>
-        <TextBox x:Name="DoZadzwonienia_TextBox" HorizontalAlignment="Left" Height="23" Margin="24,313,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="Zadzwon_Button" Content="Zadzwoń" HorizontalAlignment="Left" Margin="24,398,0,0" VerticalAlignment="Top" Width="200" Click="Zadzwonbutton_Click" Height="52" FontSize="25" Background="#FF009E0E" Foreground="White" BorderThickness="5"/>
-        <Button x:Name="ZakonczNasluch_Button" Content="Zakończ nasłuch" HorizontalAlignment="Left" Margin="24,472,0,0" VerticalAlignment="Top" Width="200" Click="ZakonczNasluchbutton_Click" Height="52" FontSize="25" Background="#FFFB6A33"/>
-        <Button x:Name="ZakonczRozmowe_Button" Content="Zakończ rozmowę" HorizontalAlignment="Left" Margin="24,529,0,0" VerticalAlignment="Top" Width="200" Click="ZakonczRozmowebutton_Click" Height="52" FontSize="25" Foreground="White" Background="#FF8F0000" BorderThickness="5" />
-        <Label x:Name="Zadzwon_Label" Content="Zadzwoń" HorizontalAlignment="Center" Height="89" Margin="0,10,0,0" VerticalAlignment="Top" Width="324" FontSize="70" Foreground="White" FontWeight="SemiBold" FontFamily="Microsoft YaHei"/>
-        <Label x:Name="Kontakty_Label" Content="Kontakty" HorizontalAlignment="Left" Margin="645,97,0,0" VerticalAlignment="Top" Width="120" Foreground="White" FontSize="20"/>
-        <Button x:Name="Wyloguj_Button" Content="←" HorizontalAlignment="Left" Margin="25,25,0,0" VerticalAlignment="Top" Width="65" Height="65" FontSize="65" VerticalContentAlignment="Center" Padding="0,-19,0,0" Background="#FFFB6A33" Click="Wylogujbutton_Click"/>
-        <Button x:Name="Ustawienia_Button" Content="⚙" HorizontalAlignment="Right" Margin="0,25,25,0" VerticalAlignment="Top" Width="65" Height="65" FontSize="45" VerticalContentAlignment="Center" Padding="2,0,0,2" Background="#FFFB6A33" Click="Ustawieniabutton_Click"/>
-        <Label x:Name="Status_Label" Content="Label" HorizontalAlignment="Left" Margin="25,104,0,0" VerticalAlignment="Top" Width="385" Height="154" FontSize="10"/>
-        <Button x:Name="DodajZnajomego_Button" Content="Dodaj znajomego" HorizontalAlignment="Left" Margin="565,139,0,0" VerticalAlignment="Top" Width="200" Height="52" FontSize="25" Background="#FFFB6A33" Click="DodajZnajomegobutton_Click"/>
-        <Button x:Name="UsunKonto_Button"  Content="Usuń konto" HorizontalAlignment="Left" Margin="149,312,0,0" VerticalAlignment="Top" Width="75" Click="UsunKonto_Button_Click"/>
-        <ItemsControl Name="ListaKontaktow_ItemsControl" HorizontalAlignment="Left" Height="300" Margin="367,263,0,0" VerticalAlignment="Top" Width="398" FontSize="18" VerticalContentAlignment="Center">
+        <Button x:Name="Wyloguj_Button" Content="←" HorizontalAlignment="Left" Margin="25,25,0,0" VerticalAlignment="Top" Width="100" Height="65" FontSize="65" VerticalContentAlignment="Center" Padding="0,-19,0,0" Background="#FFFB6A33" Click="Wylogujbutton_Click"/>
+        <Button x:Name="UsunKonto_Button" Content="Usuń konto" HorizontalAlignment="Left" Margin="150,25,0,0" VerticalAlignment="Top" Width="225" Height="65" FontSize="25" Background="#FFFB6A33" Click="UsunKonto_Button_Click"/>
+        <Button x:Name="DodajZnajomego_Button" Content="Dodaj kontakt" HorizontalAlignment="Right" Margin="0,25,150,0" VerticalAlignment="Top" Width="225" Height="65" FontSize="25" Background="#FFFB6A33" Click="DodajZnajomegobutton_Click"/>
+        <Button x:Name="Ustawienia_Button" Content="⚙" HorizontalAlignment="Right" Margin="0,25,25,0" VerticalAlignment="Top" Width="100" Height="65" FontSize="45" VerticalContentAlignment="Center" Padding="2,0,0,2" Background="#FFFB6A33" Click="Ustawieniabutton_Click" ToolTip="Zmiana urządzenia audio podczas rozmowy nie odniesie żadnego efektu, aby zmiany zaczęły obowiązywać należy zakończyć rozmowę i rozpocząć ją raz jeszcze."/>
+
+        <Label x:Name="WybranyUzytkownik_Label" Content="" HorizontalAlignment="Left" Margin="25,115,0,0" VerticalAlignment="Top" Height="30" Width="350" FontSize="16" Foreground="White" HorizontalContentAlignment="Center" Padding="5,0" />
+        <ItemsControl x:Name="Wiadomosci_ItemsControl" Width="350" Height="100" HorizontalAlignment="Left" Margin="25,170,0,0" VerticalAlignment="Top">
             <ItemsControl.Template>
                 <ControlTemplate>
-                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="Visible">
+                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="Auto">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>
             </ItemsControl.Template>
         </ItemsControl>
-        <Label x:Name="CzasRozmowy_Label"  Content="TO TRZEBA UKRYC" HorizontalAlignment="Left" Margin="410,207,0,0" VerticalAlignment="Top" Width="100"/>
+        <TextBox x:Name="TrescWiadomosci_TextBox" HorizontalAlignment="Left" Height="30" Margin="25,295,0,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="" Width="210" Visibility="Hidden" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Button x:Name="WyslijWiadomosc_Button" Content="Wyślij wiadomość" HorizontalAlignment="Left" Margin="260,295,0,0" VerticalAlignment="Top" Height="30" Width="115" Click="WyslijWiadomosc_Button_Click" Foreground="White" Background="#FF009E0E" IsEnabled="False" Visibility="Hidden"/>
+
+        <Label x:Name="CzasRozmowy_Label"  Content="" HorizontalAlignment="Left" Margin="25,350,0,0" VerticalAlignment="Top" Width="350" Foreground="White" Height="40" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="20"/>
+        <TextBlock x:Name="Status_TextBlock" Text="Tu pojawiać się będą dodatkowe informacje. Trwa ładowanie." HorizontalAlignment="Left" Margin="25,415,0,0" VerticalAlignment="Top" Width="100" Height="125" FontSize="15" Foreground="White" TextWrapping="Wrap"/>
+        <Button x:Name="Zadzwon_Button" Content="Zadzwoń" HorizontalAlignment="Left" Margin="150,415,0,0" VerticalAlignment="Top" Width="225" Click="Zadzwonbutton_Click" Height="50" FontSize="25" Background="#FF009E0E" Foreground="White" BorderThickness="5" IsEnabled="False"/>
+        <Button x:Name="ZakonczRozmowe_Button" Content="Zakończ rozmowę" HorizontalAlignment="Left" Margin="150,490,0,0" VerticalAlignment="Top" Width="225" Click="ZakonczRozmowebutton_Click" Height="50" FontSize="25" Foreground="White" Background="#FF8F0000" BorderThickness="5" IsEnabled="False" />
+        <ItemsControl Name="ListaKontaktow_ItemsControl" HorizontalAlignment="Left" Height="425" Margin="425,115,0,0" VerticalAlignment="Top" Width="350" FontSize="18" VerticalContentAlignment="Center">
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="Auto">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+        </ItemsControl>
     </Grid>
 </Page>

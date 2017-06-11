@@ -75,17 +75,18 @@ namespace SuperIP_Phone
                             StackPanel zawartosc_listbox = new StackPanel()
                             {
                                 Background = new BrushConverter().ConvertFromString("#FFFB6A33") as SolidColorBrush,
-                                MaxHeight = 400,
                                 Margin = new Thickness(0, 0, 0, 5),
                                 Width = ZnalezioneKontakty_ItemsControl.Width - 18,
-                                Orientation = Orientation.Horizontal
+                                Orientation = Orientation.Horizontal,
+                                MinHeight = 70
                             };
 
                             Button dodaj_button = new Button()
                             {
-                                Content = "Dodaj",
-                                Width = 70,
-                                Height = 70,
+                                Content = "➕",
+                                Width = 55,
+                                Height = 55,
+                                FontSize = 35,
                                 Margin = new Thickness(20, 0, 0, 0),
                                 Name = kontakt.login
                             };
@@ -96,7 +97,8 @@ namespace SuperIP_Phone
                                 Padding = new Thickness(10, 5, 0, 5),
                                 Text = kontakt.ToString(),
                                 Width = zawartosc_listbox.Width * 0.75,
-                                TextWrapping = TextWrapping.WrapWithOverflow
+                                TextWrapping = TextWrapping.WrapWithOverflow,
+                                FontSize = 15
                             };
 
                             zawartosc_listbox.Children.Add(dane_kontaktu);
@@ -139,7 +141,7 @@ namespace SuperIP_Phone
                 {
                     baza_danych.dodaj_uzytkownika_do_kontaktow(((Kontakt)Application.Current.Properties["ZalogowanyUzytkownik"]).login, login_do_dodania);
                     czy_dodano_kontakt = true;
-                    ((StronaGlowna)System.Windows.Application.Current.Properties["strona_glowna"]).listaKontaktow = baza_danych.pobierz_liste_kontaktow();
+                    ((StronaGlowna)System.Windows.Application.Current.Properties["strona_glowna"]).OdswiezListeKontaktow();
                 }
             }
         }

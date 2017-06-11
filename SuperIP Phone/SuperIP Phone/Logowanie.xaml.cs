@@ -88,9 +88,10 @@ namespace SuperIP_Phone
             {
                 foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
                 {
-                    if (ip.IsDnsEligible)
+                    string adres_ip = ip.Address.ToString();
+                    if (ip.IsDnsEligible && adres_ip.Length <= 15)
                     {
-                        AdresIPcomboBox.Items.Add(ip.Address.ToString());
+                        AdresIPcomboBox.Items.Add(adres_ip);
                     }
                 }
             }

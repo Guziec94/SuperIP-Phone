@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SuperIP_Phone"
         mc:Ignorable="d"
         Title="Wyszukaj i dodaj kontakty" 
-        Height="400" Width="450" 
+        Height="400" Width="440" 
         Background="#FF3A86FF" ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Grid>
@@ -29,7 +29,7 @@
         <ItemsControl Name="ZnalezioneKontakty_ItemsControl" HorizontalAlignment="Left" Height="300" Margin="15,320,0,0" VerticalAlignment="Top" Width="398" FontSize="18" VerticalContentAlignment="Center" Visibility="Collapsed" BorderBrush="Black" BorderThickness="1">
             <ItemsControl.Template>
                 <ControlTemplate>
-                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="Visible">
+                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="Auto">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>
